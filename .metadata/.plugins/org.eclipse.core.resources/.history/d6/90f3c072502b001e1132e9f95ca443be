@@ -1,0 +1,67 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<div class="row my-5">
+	<div class="col">
+		<h1 class="text-center mb-5">지역검새크</h1>
+		<div id="div_local"></div>
+		<div class="my-5 text-center">
+			<button class="btn btn-primary" id="prev">이전</button>
+			<span class="mx-3" id="page">1</span>
+			<button class="btn btn-primary" id="next">다음</button>
+		</div>
+	</div>
+</div>
+<script id="temp_local" type="text/x-handlebars-template">
+	<table class="table">
+	{{#each documents}}
+		<tr>
+			<td>{{id}}</td>
+			<td>{{place_name}}</td>
+			<td>{{address_name}}</td>
+			<td>{{phone}}</td>
+		</tr>
+	{{/each}}
+	</table>
+</script>
+<script>
+let page=1;
+
+$("#prev").on("click", function(){
+	page--;
+	getList();
+})
+
+$("#next").on("click", function(){
+	page++;
+	getList();
+})
+
+$("#page").text(page + "/");
+
+getList();
+function getList(){
+	$.ajax({
+		type:"get",
+		url:"https://dapi.kakao.com/v2/local/search/keyword.json",
+		headers:{"Authorization":"KakaoAK 7857aae77aaad7dfa832ea3c00257177"},
+		dataType:"json",
+		data:{query:"인천 버거킹", size:5, page:page},
+		success:function(data){
+			let temp = Handlebars.compile($("#temp_local").html());
+            $("#div_local").html(temp(data));
+            
+            if(page==1){
+            	$("#prev").attr("disabled", true);
+            }else{
+            	$("#prev").attr("disabled", false);
+            }
+            
+            if(page==last){
+            	$("#next").attr("disabled", true);
+            }else{
+            	$("#next").attr("disabled", false);
+            }
+		}
+	});
+}
+</script>

@@ -1,0 +1,44 @@
+package model;
+
+import java.sql.*;
+import java.util.*;
+
+public class ReviewDAO {
+	
+	public ArrayList<ReviewVO> list(String query, int page){
+		ArrayList<ReviewVO> array = new ArrayList<ReviewVO>();
+		try {
+			String sql = "select * from view_reviews where gid=? order by rid desc";
+			PreparedStatement ps = Database.CON.prepareStatement(sql);
+			ps.setString(1, "%"+query+"%");
+			ps.setInt(2, (page-1)*6);
+			ResultSet rs = ps.executeQuery();
+			while(rs.next()) {
+				ReviewVO vo =new ReviewVO();
+				vo.setGid(rs.getString("gid"));
+				vo.setMaker(rs.getString("maker"));
+				vo.setRegDate(sdf.format(rs.getTimestamp("regDate")));
+				vo.setTitle(rs.getString("title"));
+				vo.setPrice(rs.getInt("price"));
+				vo.setImage(rs.getString("image"));
+				array.add(vo);
+			}
+		}catch(Exception e) {
+			System.out.println("상품목록" + e.toString());
+		}
+		return array;
+	}
+	
+	public void insert(ReviewVO vo) {
+		try {
+			String sql="insert into reviews (uid, gid, content) values(?,?,?)";
+			PreparedStatement ps = Database.CON.prepareStatement(sql);
+			ps.setString(1, vo.getUid());
+			ps.setString(2, vo.getGid());
+			ps.setString(2, vo.getContent());
+			ps.execute();
+		}catch(Exception e) {
+			System.out.println("리뷰등록" + e.toString());
+		}
+	}
+}

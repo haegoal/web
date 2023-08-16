@@ -1,0 +1,17 @@
+@charset "UTF-8";
+@import url('https://fonts.googleapis.com/css2?family=Gasoek+One&family=Single+Day&display=swap');
+	
+*{
+font-family: 'Gasoek One', sans-serif;
+font-family: 'Single Day', cursive;
+}
+
+a{
+	margin-right: 20px;
+}
+
+@media screen and (max-width: 960px) {
+   #img_header { 
+	   display: none; 
+   }
+}

@@ -1,0 +1,23 @@
+package model;
+
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+
+public class FavoriteDAO {
+	public int read(String gid, String uid) {
+		int count=0;
+		try {
+			String sql = "select count(*) ucnt from favorite where gid=? and uid=?";
+			PreparedStatement ps = Database.CON.prepareStatement(sql);
+			ps.setString(1, gid);
+			ps.setString(2, uid);
+			ResultSet rs = ps.executeQuery();
+			if(rs.next()) {
+				count = rs.getInt("ucnt");
+			}
+		}catch(Exception e) {
+			System.out.println("좋아요" + e.toString());
+		}
+		return count;
+	}
+}

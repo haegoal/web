@@ -1,0 +1,48 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<div class="row" id="page_order" style="display:none;">
+        <div class="col">
+            <h1 class="text-center">주문하기</h1>
+            <div id="div_order"></div>
+        </div>
+</div>
+<script id="temp_order" type="text/x-handlebars-template">
+<table class="table">
+	{{#each .}}
+		<tr>
+			<td>{{title}}</td>
+			<td>{{gid}}</td>
+			<td><img src="{{image}}" width="60px"></td>
+			<td>{{sum 1 price}}</td>
+			<td>{{qnt}}</td>
+			<td>{{sum qnt price}}</td>
+		<tr>
+	{{/each}}
+				<tr>
+					<td colspan="6" class="text-end pe-5">
+				<h5>총합계: <span id="sum">0원</span></h5>
+					</td>
+				</tr>
+<table>
+</script>
+<script>
+	
+	
+	function getOrder(data){
+		const temp = Handlebars.compile($("#temp_order").html());
+		$("#div_order").html(temp(data));
+	}
+	
+	function getSum(){
+		let sum=0;
+		$("#div_order .tr").each(function(){
+			const price = $(this).attr("price");
+			const qnt= $(this).find(".qnt").val();
+			sum+=price*qnt;
+		})
+		$("#sum").html(sum.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "원");
+	}
+
+
+</script>
+

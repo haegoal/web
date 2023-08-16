@@ -1,0 +1,12 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<div class="row">
+	<div class="col">
+		<h1 class="text-center">구매목록</h1>
+		<div class="row">
+			<div class="col">주문번호: ${vo.pid}</div>
+			<div class="col">주문자: ${vo.uid} ${vo.uname}</div>
+			<div class="col">연락처: ${vo.rphone}</div>
+		</div>
+	</div>
+</div>

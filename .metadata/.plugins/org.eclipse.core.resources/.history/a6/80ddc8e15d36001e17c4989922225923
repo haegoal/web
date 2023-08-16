@@ -1,0 +1,70 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<div class="row">
+	<div class="col">
+		<h1 class="text-center">회원가입</h1>
+			
+				<form name="frm" class="card p-3">
+					<div class="input-group">
+						<span class="input-group-text">아이디</span>
+						<input class="form-control" name="uid">
+						<button class="btn btn-primary" id="btn-check">중복체크</button>
+					</div>
+					<div class="input-group">
+						<span class="input-group-text">비밀번호</span>
+						<input class="form-control" type="password" name="upass">
+					</div>
+					<div class="input-group">
+						<span class="input-group-text">이름</span>
+						<input class="form-control" name="uname">
+					</div>
+					<div class="input-group">
+						<span class="input-group-text">주소</span>
+						<input class="form-control" name="address1">
+					</div>
+					<div class="input-group">
+						<span class="input-group-text">상세주소</span>
+						<input class="form-control" name="address2">
+					</div>
+					<div class="input-group">
+						<span class="input-group-text">번호</span>
+						<input class="form-control" name="phone">
+					</div>
+					<div class="text-center">
+						<button class="btn btn-primary">등록</button>
+					</div>
+				</form>
+	</div>
+</div>
+<script>
+	let check=false;
+	
+	$(frm).on("submit", function(e){
+		e.preventDefault();
+		const uid = $(frm.uid).val();
+		const upass = $(frm.upass).val();
+		const uname = $(frm.uname).val();
+		
+		if(uid==""){
+			alert("아이디입력바람")
+			$(frm.uid).focus();
+		}else if(check==false){
+			alert("중복체크해주세요.")
+		}
+	});
+	
+	$("#btn-check").on("click", function(){
+		$.ajax({
+			type:"post",
+			url:"/user/login",
+			data:{uid:$(frm.uid).val(), pass:""},
+			success:function(data){
+				if(data==0){
+					check=true;
+				}else{
+					
+				}
+			}
+		})
+	});
+</script>

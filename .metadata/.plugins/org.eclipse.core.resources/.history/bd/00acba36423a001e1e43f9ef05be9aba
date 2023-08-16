@@ -1,0 +1,25 @@
+package model;
+
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+
+import org.json.simple.JSONObject;
+
+public class FavoriteDAO {
+	public JSONObject read(String gid, String uid) {
+		JSONObject obj = new JSONObject();
+		try {
+			String sql = "select count(*) ucnt from favorite where gid=? and uid=?";
+			PreparedStatement ps = Database.CON.prepareStatement(sql);
+			ps.setString(1, gid);
+			ps.setString(2, uid);
+			ResultSet rs = ps.executeQuery();
+			if(rs.next()) {
+				obj.put("ucnt", rs.getInt("ucnt"));
+			}
+		}catch(Exception e) {
+			System.out.println("좋아요" + e.toString());
+		}
+		return obj;
+	}
+}

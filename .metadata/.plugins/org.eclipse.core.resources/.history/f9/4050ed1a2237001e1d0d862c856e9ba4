@@ -1,0 +1,91 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+    <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<style>
+	span{
+		width: 150px;
+		justify-content: center;
+	}
+	#image {
+		border-radius:50%;
+		cursor:pointer
+	}
+</style>
+
+<div class="row" id="page_order" style="display:none;">
+        <div class="col">
+            <h1 class="text-center">주문하기</h1>
+            <div id="div_order"></div>
+            <h1 class="text-center">주문자정보</h1>
+            <form name="frm" class="card p-3">
+            	<div class="input-group mb-3">
+            		<span class="input-group-text">주문자명</span>
+            		<input class="form-control" name="uname" value="${user.uname}">
+            	</div>
+            	<div class="input-group mb-3">
+            		<span class="input-group-text">연락처</span>
+            		<input class="form-control"  name="uphone" value="${user.phone}">
+            	</div>
+            	<div class="input-group mb-3">
+            		<span class="input-group-text">주문자주소</span>
+            		<input class="form-control" name="address1" value="${user.address1}">
+            		<a class="btn btn-primary" id="btn-search">주소검색</a>
+            	</div>
+            	<div class="input-group mb-3">
+            		<span class="input-group-text">상세주소</span>
+            		<input class="form-control" name="address2" value="${user.address2}">
+            	</div>
+            </form>
+        </div>
+</div>
+<script id="temp_order" type="text/x-handlebars-template">
+<table class="table">
+	{{#each .}}
+		<tr class="tr" price="{{price}}" qnt="{{qnt}}">
+			<td>{{title}}</td>
+			<td>{{gid}}</td>
+			<td><img src="{{image}}" width="60px"></td>
+			<td>{{sum 1 price}}</td>
+			<td>{{qnt}}</td>
+			<td>{{sum qnt price}}</td>
+		<tr>
+	{{/each}}
+				<tr>
+					<td colspan="6" class="text-end pe-5">
+				<h5>총합계: <span id="sum">0원</span></h5>
+					</td>
+				</tr>
+<table>
+</script>
+<script>
+	
+	
+	function getOrder(data){
+		const temp = Handlebars.compile($("#temp_order").html());
+		$("#div_order").html(temp(data));
+		getOrderSum()
+	}
+	
+	function getOrderSum(){
+		let sum=0;
+		$("#div_order .tr").each(function(){
+			const price = $(this).attr("price");
+			const qnt= $(this).attr("qnt");
+			sum+=price*qnt;
+		})
+		$("#sum").html(sum.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "원");
+	}
+
+	$("#btn-search").on("click", function(){
+		new daum.Postcode({
+			oncomplete : function(data){
+				//console.log(data);
+				if(data.buildingName!=""){
+					$(frm.address1).val(data.address + " " + data.buildingName);
+				}
+				$(frm.address1).val(data.address);
+			}
+		}).open();
+	});
+</script>
+
